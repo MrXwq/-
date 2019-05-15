@@ -7,6 +7,13 @@ Vue.use(VueRouter)
 //导入路由模块
 import router from './router'
 
+//导入格式化时间的过滤器
+import moment from 'moment'
+//定义全局的过滤器
+Vue.filter('dataFormat',function(dataStr,pattern = "YYYY-MM-DD HH:mm:ss"){
+    return moment(dataStr).format(pattern)
+})
+
 //导入App根组件
 import app from './App.vue'
 
@@ -18,6 +25,8 @@ Vue.use(Mint);
 //引入mui-ui
 import './lib/css/mui.min.css'
 import './lib/css/icons-extra.css'
+
+
 
 //导入axios
 import axios from 'axios'
