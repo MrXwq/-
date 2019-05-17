@@ -103,7 +103,7 @@ export default {
 			}
 			.info{
 				color: white;
-				text-align: left;
+				text-align: center;
 				position: absolute;
 				bottom: 0;
 				background: rgba(0,0,0,0.4);
