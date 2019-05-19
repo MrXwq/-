@@ -23,12 +23,15 @@
             <div class="mui-card-content">
                 <div class="mui-card-content-inner">
                     <p class="price">
-                        市场价：<del>￥3333</del>&nbsp;&nbsp;销售价：<span class="now_price">
-                            ￥2222
+                        市场价：<del>￥{{product.oldValue}}</del>&nbsp;&nbsp;销售价：<span class="now_price">
+                            ￥{{product.newValue}}
                         </span>
                     </p>
                     <p>
-                        购买数量：<goodsinfo_numbox @getCount = "getSelectNum"></goodsinfo_numbox>
+                        <!-- getCount：父组件绑定方法给子组件
+                            :max 绑定商品的库存
+                         -->
+                        购买数量：<goodsinfo_numbox @getCount = "getSelectNum" :max = 'product.productMax'></goodsinfo_numbox>
                     </p>
                     <p>
                         <mt-button type = "primary" size = "small">立即购买</mt-button>
@@ -69,9 +72,14 @@ export default {
     },
     data(){
         return{
+            //商品id
+            id:1,
+            //默认小球隐藏
             isshow:false,
-            //默认添加一个
-            selectNum:1
+            //默认添加一个进购物车
+            selectNum:1,
+            //商品信息
+            product:{'newValue':2000,'oldValue':3000,'productMax':60},
         }
     },
     methods:{
@@ -83,8 +91,18 @@ export default {
         goComment(id) {
             this.$router.push({name:'goodscomment',params: { id }});
         },
+        //加入购物车
         addcart(){
             this.isshow =! this.isshow
+            //拼接出一个要保存到store中car数组中的商品信息对象
+            let productsInfo = {
+                    id:this.id,
+                    count:this.selectNum,
+                    price:this.product.newValue,
+                    selected:true
+                }
+            //调用store中的mutation来将商品加入购物车
+            this.$store.commit("addToCart",productsInfo);
         },
         beforeEnter(el) {
             el.style.transform = "translate(0,0)"
@@ -105,6 +123,7 @@ export default {
         afterEnter(el) {
             this.isshow =! this.isshow;
         },
+        //父组件给子组件传递函数
         getSelectNum(count){
             this.selectNum = count;
             console.log('父组件收到的值'+this.selectNum)

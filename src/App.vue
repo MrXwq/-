@@ -1,7 +1,13 @@
 <template>
     <div class="container">
+        
         <!-- 顶部 -->
-        <mt-header fixed title="炒鸡饿"></mt-header>
+        <mt-header fixed title="炒鸡饿">
+            <!-- 返回按钮 -->
+            <span slot="left" @click="back" v-show="flag">
+                <mt-button icon="back">back</mt-button>
+            </span>
+        </mt-header>
         
         <!-- 中间router-view区域 -->
         <transition>
@@ -20,7 +26,8 @@
 			</router-link>
 			<router-link to="/cart" class="mui-tab-item-llb" >
 				<span class="mui-icon mui-icon-extra mui-icon-extra-cart">
-                    <span class="mui-badge" id="badge">0</span></span>
+                    <!-- 获取store上的getters上暴露的数据 -->
+                    <span class="mui-badge" id="badge">{{this.$store.getters.getAllCount}}</span></span>
 				<span class="mui-tab-label">购物车</span>
 			</router-link>
 			<router-link to="/search" class="mui-tab-item-llb" >
@@ -36,11 +43,25 @@
     export default {
         data() {
             return {
-
+                flag:false
             }
         },
         methods: {
-        
+            back() {
+                this.$router.go(-1)
+            }
+        },
+        created(){
+            this.flag = this.$route.path === '/home' ? false : true
+        },
+        watch:{
+            "$route.path":function(newValue) {
+                if(newValue === '/home'){
+                    this.flag = false
+                }else{
+                    this.flag = true
+                }
+            }
         }
     }
 </script>
